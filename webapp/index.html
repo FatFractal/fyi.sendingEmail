@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en" ng-app="ffConsole">
+<head>
+  <meta charset="utf-8">
+  <title>The FatFractal FYI Test Harness</title>
+  <script type="text/javascript">
+    function httpsRedirect() {
+      var httpURL = window.location.hostname + window.location.pathname;
+      var httpsURL = "https://" + httpURL;
+      window.location = httpsURL;
+    }
+    console.log(window.location.href);
+    console.log(!window.location.href.match('^https://') && !window.location.href.match('^http://localhost'));
+    if (!window.location.href.match('^https://') && !window.location.href.match('^http://localhost'))
+      httpsRedirect();
+  </script>
+  <link rel="stylesheet" href="css/app.css"/>
+  <link href="lib/ui-bootstrap/assets/bootstrap.css" rel="stylesheet" media="screen">
+</head>
+<!--
+<body onunload="cleanUp()">
+-->
+<body>
+<div id="navbar" class="navbar" ng-controller="LoginCtrl">
+  <div class="navbar-inner">
+    <img src="img/beta.png" width="240px" class="brand pull-left">
+    <h1 style="margin: 20px -20px">Test Harness</h1>
+    <div class="span4" ui-if="refreshing" ng-cloak spinner style="margin: 20px -20px"></div>
+  </div>
+</div>
+<div class="well">
+  <h1>FYI - Sending Email</h1>
+  <p>This test checks that the sendEmail function works properly with a given email account.
+  </p>
+  <div class="well">
+    <h2>The following Models are used with this post</h2>
+    <div class="well">
+      <p>function Email() {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;this.host = null;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;this.port = null;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;this.auth = true;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;this.authPort = null;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;this.username = null;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;this.password = null;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;this.from = null;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;this.to = null;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;this.cc = null;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;this.bcc = null;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;this.subject = null;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;this.text = null;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;this.html = null;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;return this;<br>
+        }
+      </p>
+    </div>
+    <h4>You can see the data created by this app using the FatFractal DataBrowser (
+      <a href = https://system.fatfractal.com/console/databrowser/databrowser.html?baseUrl=https://fyi.fatfractal.com/sendingEmail target = _blank>
+        here
+      </a>
+      )
+    </h4>
+    <h4>You can access the source code for the sample application (
+      <a href = https://github.com/FatFractal/fyi.sendingEmail target = _blank>
+        here
+      </a>
+      )
+    </h4>
+    <h4>You can see the API metadata for this application (
+      <a href = https://fyi.fatfractal.com/sendingEmail/ff/metadata/text target = _blank>
+        here
+      </a>
+      )
+    </h4>
+  </div>
+  <div class="well">
+    <h2>Create a Test message</h2>
+    <div class="well">
+      Host:<br> 
+      <input id="host-input" type="text" class="input-medium search-query" value="Please enter smtp host here...">
+      <br>
+      Port:<br> 
+      <input id="port-input" type="text" class="input-medium search-query" value="Please enter smtp port here...">
+      <br>
+      Auth port:<br> 
+      <input id="authPort-input" type="text" class="input-medium search-query" value="Please enter smtp auth port here...">
+      <br>
+      Username:<br> 
+      <input id="username-input" type="text" class="input-medium search-query" value="Please enter sending username here...">
+      <br>
+      Password:<br> 
+      <input id="password-input" type="text" class="input-medium search-query" value="Please enter sending password here...">
+      <br>
+      From:<br> 
+      <input id="from-input" type="text" class="input-medium search-query" value="Please enter from email here...">
+      <br>
+      To:<br> 
+      <input id="to-input" type="text" class="input-medium search-query" value="Please to email here...">
+      <br>
+      Subject:<br> 
+      <input id="subject-input" type="text" class="input-medium search-query" value="Please enter subject here...">
+      <br>
+      Text:<br> 
+      <input id="text-input" type="text" class="input-medium search-query" value="Please enter message text here...">
+      <br>
+    </div>
+    <button id="sendEmail-button" class="btn" onclick="sendEmail()">Try it!</button>
+    <br>
+    <p id = "sendEmail-response"></p>
+  </div>
+</div>
+<!--Scripts-->
+<script src="lib/FatFractal.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/beautify.js"></script>
+<!--
+<script src="lib/moment.min.js"></script>
+<script src="lib/spin.min.js"></script>
+<script src="resources/en.js"></script>
+
+-->
+</body>
+<script type="text/javascript">
+function Email() {
+   this.host = null; 
+   this.port = null; 
+   this.auth = true;
+   this.authPort = null;
+   this.username = null; 
+   this.password = null 
+   this.from = null; 
+   this.to = null; 
+   this.cc = null; 
+   this.bcc = null;
+   this.subject = null;
+   this.text = null;
+   this.html = null;
+}
+
+function sendEmail() {
+   ff.login("test_user", "T3st_Us3r", function() {
+      var el = document.getElementById('sendEmail-response');
+      var m = new Email();
+      m.host = document.getElementById('host-input').value; 
+      m.port = document.getElementById('port-input').value; 
+      m.auth = true;
+      m.authPort = document.getElementById('authPort-input').value;
+      m.username = document.getElementById('username-input').value; 
+      m.password = document.getElementById('password-input').value; 
+      m.from = document.getElementById('from-input').value; 
+      m.to = document.getElementById('to-input').value; 
+      m.cc = null; 
+      m.bcc = null;
+      m.subject = document.getElementById('subject-input').value;
+      m.text = document.getElementById('text-input').value;
+      m.html = null;
+      ff.postObjToExtension(m, "/ff/ext/testSendEmail", function(resp) {
+         var str = js_beautify(JSON.stringify(resp), {
+            indent_size: 4,
+            indent_char: '&nbsp;',
+            linefeed_char: '<br>'
+         });
+         el.innerHTML = "<br><div class = 'well blue'>Email post response  " +
+            str + "</div>";
+         console.log("Email post response: " + JSON.stringify(resp));
+      }, function(code, msg) {
+         console.error("sendEmail() postObjToExtension Error: " + code + " " + msg);
+         el.innerHTML = "<br><div class = 'well red'>Got an error: " + msg + "</div>";
+      });
+   }, function(code, msg) {
+      console.error("Error logging in: " + code + ", error message" + msg);
+   });
+}
+
+</script>
+<script type="text/javascript">
+   var ff = new FatFractal();
+</script>
+</html>
